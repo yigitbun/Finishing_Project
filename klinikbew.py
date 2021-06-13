@@ -12,14 +12,21 @@ import csv
 # df = pd.DataFrame(columns=['bewertungen'])
 
 # import pandas as pd
-kliniken =  ['https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig']
+# kliniken =  ['https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig']
 #'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-kliniken-herzogin-elisabeth-braunschweig', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig'], 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-kliniken-herzogin-elisabeth-braunschweig', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-stadtkrankenhaus-wolfsburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-peine', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-st-martini-duderstadt', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-henriettenstiftung-hannover', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-eilenriede-klinik-hannover', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-sophien-klinik-hannover', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-agnes-karl-krankenhaus-laatzen', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinikum-wahrendorff-sehnde', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-landeskrankenhaus-hildesheim', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-nienburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-stadtkrankenhaus-cuxhaven', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-drk-krankenhaus-seepark-debstedt-langen', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-buchholz', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-winsen', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-landeskrankenhaus-lueneburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-diakoniekrankenhaus-rotenburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-osterholz-scharmbeck', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-fallingbostel', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-rehazentrum-soltau', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-walsrode', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-buxtehude', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-diana-klinik-physikalische-medizin-bad-bevensen']
 
 DRIVER_PATH = '/Users/yigit/Github/chromedriver'
 
-for k in kliniken:
+def scrape(url):
     driver = webdriver.Chrome(executable_path=DRIVER_PATH)
-    driver.get(k +'/bewertungen?allbew#more')
+    options = webdriver.ChromeOptions()
+
+     #chromedriver language change to German
+    options.add_experimental_option('prefs', {'intl.accept_languages': 'de'})
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH,options=options)
+
+
+    driver.get(url +'/bewertungen?allbew#more')
 
     driver.find_element_by_id("ez-accept-naecesary").click()
 
@@ -64,19 +71,24 @@ for k in kliniken:
 
 
     # print(len(QualitaetBeratung))
+    time.sleep(3)
+    driver.quit()
     
 
-
+df_url = pd.read_excel(r'Klinikliste.xlsx')[:24]["Link Klinikbewertungen"]
+for url in df_url:
+    scrape(url)
 
 # Create the dataframe and csv
 # -------------------------------------
 
-    df = pd.DataFrame(zip(NameKlinik, Titel, DatumBewertung, Fachbereich, Erfahrungsbericht, Gesamtzufriedenheit, QualitaetBeratung, MedizBehandlung, VerwaltungAblaeufe), columns=["NameKlinik", "Titel", "DatumBewertung", "Fachbereich", "Erfahrungsbericht", "Gesamtzufriedenheit", "QualitätBeratung", "MedizBehandlung", "VerwaltungAblaeufe"])
-    df.to_csv('kb.csv', index=False, encoding="utf-8")
+df = pd.DataFrame(zip(NameKlinik, Titel, DatumBewertung, Fachbereich, Erfahrungsbericht, Gesamtzufriedenheit, QualitaetBeratung, MedizBehandlung, VerwaltungAblaeufe), columns=["NameKlinik", "Titel", "DatumBewertung", "Fachbereich", "Erfahrungsbericht", "Gesamtzufriedenheit", "QualitätBeratung", "MedizBehandlung", "VerwaltungAblaeufe"])
+df.to_csv('kb.csv', index=False, encoding="utf-8")
 
 
-    time.sleep(3)
-    driver.quit()
+
+
+    
 
 
 
