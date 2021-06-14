@@ -5,25 +5,23 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import pandas as pd
-import csv
 
 
-#define dataframe
-# df = pd.DataFrame(columns=['bewertungen'])
+NameKlinik = []
+Titel = []
+DatumBewertung = []
+Fachbereich = []
+Erfahrungsbericht = []
+Gesamtzufriedenheit = []
+QualitaetBeratung = []
+MedizBehandlung = []
+VerwaltungAblaeufe = []
 
-# import pandas as pd
-# kliniken =  ['https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig']
-#'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-kliniken-herzogin-elisabeth-braunschweig', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig'], 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-kliniken-herzogin-elisabeth-braunschweig', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-am-zuckerberg-braunschweig', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-stadtkrankenhaus-wolfsburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-peine', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-st-martini-duderstadt', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-henriettenstiftung-hannover', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-eilenriede-klinik-hannover', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-sophien-klinik-hannover', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-agnes-karl-krankenhaus-laatzen', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinikum-wahrendorff-sehnde', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-landeskrankenhaus-hildesheim', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-nienburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-stadtkrankenhaus-cuxhaven', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-drk-krankenhaus-seepark-debstedt-langen', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-buchholz', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-winsen', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-landeskrankenhaus-lueneburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-diakoniekrankenhaus-rotenburg', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-osterholz-scharmbeck', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-klinik-fallingbostel', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-rehazentrum-soltau', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-walsrode', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-krankenhaus-buxtehude', 'https://www.klinikbewertungen.de/klinik-forum/erfahrung-mit-diana-klinik-physikalische-medizin-bad-bevensen']
-
-DRIVER_PATH = '/Users/yigit/Github/chromedriver'
 
 def scrape(url):
-    driver = webdriver.Chrome(executable_path=DRIVER_PATH)
-    options = webdriver.ChromeOptions()
 
-     #chromedriver language change to German
-    options.add_experimental_option('prefs', {'intl.accept_languages': 'de'})
-    driver = webdriver.Chrome(executable_path=DRIVER_PATH,options=options)
+#chromedriver
+    driver = webdriver.Chrome('/Users/yigit/Github/chromedriver')
 
 
     driver.get(url +'/bewertungen?allbew#more')
@@ -54,35 +52,59 @@ def scrape(url):
 # Scraping texts
 # -------------------------------------
 
-    NameKlinik = [name.text for a in titels]
-    Titel = [a.text for a in titels]
-    DatumBewertung = [a.text for a in daten]
-    Fachbereich = [a.text for a in fachbereiche]
-    Erfahrungsbericht = [a.text for a in berichte]
+    clinicName = [name.text for a in titels]
+    titel = [a.text for a in titels]
+    dateOfReview = [a.text for a in daten]
+    department = [a.text for a in fachbereiche]
+    experience = [a.text for a in berichte]
 
-# Scraping attributes for review starts
+# Scraping attributes for review stars
 # -------------------------------------
 
-    Gesamtzufriedenheit = [a.get_attribute("class") for a in gesamtListe]
-    QualitaetBeratung = [a.get_attribute("class") for a in qBeratung]
-    MedizBehandlung = [a.get_attribute("class") for a in medBehandlung]
-    VerwaltungAblaeufe = [a.get_attribute("class") for a in verwaltAbl]
+    overall = [a.get_attribute("class") for a in gesamtListe]
+    consultingQuality = [a.get_attribute("class") for a in qBeratung]
+    medTreatment = [a.get_attribute("class") for a in medBehandlung]
+    mgmt_process = [a.get_attribute("class") for a in verwaltAbl]
     # AusstattungGestaltung = [a.get_attribute("class") for a in ausGestaltung]
 
 
     # print(len(QualitaetBeratung))
     time.sleep(3)
     driver.quit()
+
+
+    for i in clinicName:
+        NameKlinik.append(i)
+    for i in titel:
+        Titel.append(i)
+    for i in dateOfReview:
+        DatumBewertung.append(i)
+    for i in department:
+        Fachbereich.append(i)
+    for i in experience:
+        Erfahrungsbericht.append(i)
+    for i in overall:
+        Gesamtzufriedenheit.append(i)
+    for i in consultingQuality:
+        QualitaetBeratung.append(i)
+    for i in medTreatment:
+        MedizBehandlung.append(i)
+    for i in mgmt_process:
+        VerwaltungAblaeufe.append(i)
     
 
 df_url = pd.read_excel(r'Klinikliste.xlsx')[:24]["Link Klinikbewertungen"]
 for url in df_url:
     scrape(url)
 
-# Create the dataframe and csv
+# Define dataframe
 # -------------------------------------
 
 df = pd.DataFrame(zip(NameKlinik, Titel, DatumBewertung, Fachbereich, Erfahrungsbericht, Gesamtzufriedenheit, QualitaetBeratung, MedizBehandlung, VerwaltungAblaeufe), columns=["NameKlinik", "Titel", "DatumBewertung", "Fachbereich", "Erfahrungsbericht", "Gesamtzufriedenheit", "QualitätBeratung", "MedizBehandlung", "VerwaltungAblaeufe"])
+
+
+# Create the csv
+# -------------------------------------
 df.to_csv('kb.csv', index=False, encoding="utf-8")
 
 
