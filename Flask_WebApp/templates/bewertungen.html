@@ -1,0 +1,645 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITea - Klinik Finder</title>
+  <style>
+    section {
+      padding: 60px 0;
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/dfdd262768.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  
+  <!-- Datatable Script-->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+  <script>
+    $(document).ready(function () {
+      $('#table_id').DataTable();
+      $('#table_id2').DataTable();
+    });
+  </script>
+  <!-- Datatable end of Script -->
+  <link href="{{ url_for('static',filename='styles/main.min.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-md navbar-light pt-5 pb-4 bg-light">
+    <div class="container-xxl">
+       <!-- navbar brand / title -->
+      <a class="navbar-brand" href="/">
+        <span class="text-secondary fw-bold">
+          <i class="fas fa-hospital-user"></i> ITea - Klinik Finder</span>
+      </a>
+      <!-- toggle button for mobile nav -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- navbar links -->
+      <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
+        <ul class="navbar-nav fw-bold">
+          <li class="nav-item">
+            <li class="nav-item">
+              <a class="nav-link" href="/"><i class="bi-house-fill"></i><span class="ms-1">Home</span></a>
+            </li>
+            <a class="nav-link" href="/bewertungen"><i class="bi bi-stars"></i></i><span class="ms-1">Bewertungen</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/vorhersage"><i class="bi bi-gear-fill"></i></i><span class="ms-1">Analyzer</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Select Hospital -->
+  <div class="container-xxl pt-3 justify-content-center col-lg-5">
+    <h2 class="text-center">Wähl dir eine Klinik</h2>
+    <form action="/bewertungen" method="POST">
+      <div class="mb-4 input-group justify-content-center py-3">
+        <select class="form-select" id="subject" name="options">
+          <!-- <option value="Auswählen" selected>Auswählen</option> -->
+            {% for i in nameKlinik %}
+          <option value="{{i}}">{{i}}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary" type="submit">Go <i class="fas fa-ambulance"></i></button>
+      </div>
+    </form>
+  </div>
+  <!-- Select Hospital end -->
+
+  <!-- Second Nav -->
+
+  <div class="container-fluid-xxl" >
+    <nav style="display: {{display}};">
+      <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Klinikbewertungen.de</button>
+
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Google Maps</button>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        
+  <!-- Klinikbewerungen Inhalt -->
+  
+    <!-- Chart & Hospital Choice -->
+  <section id="reviews" class="bg-light py-4" style="display: {{display2}};">
+      <div class="text-center">
+        <h2><i class="bi bi-stars text-altdark"></i>Krankenhaus-Bewertungen</h2>
+        <p class="lead">Was Besucher über Krankenhäuser berichten...</p>
+      </div>
+      <div class="row mb-5 g-5 justify-content-center align-items-center mx-3">
+        <div class="col-lg-4">
+          <div class="list-group">
+            <div class="list-group-item py-3">
+              <div class="pb-2">
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+              </div>
+              <h5 class="mb-1" style="font-style: italic">
+                "Weiter zu Empfehlen."
+              </h5>
+              <p class="mb-1" style="font-style: italic">
+                "Die Klinik ist sehr gut eingerichtet und ausgestattet! Sehr
+                sauber und man wird sich nicht verlaufen, einfach die Hinweise
+                folgen! Hygiene Maßnahmen gut respektiert! Das Zimmer sieht
+                nett aus, mit Gut ausgestattetem Pflegebett!"
+              </p>
+              <small>Mario berichtet als Patient</small>
+            </div>
+            <div class="list-group-item py-3">
+              <div class="pb-2">
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+                <i class="bi bi-star-fill text-altdark"></i>
+              </div>
+              <h5 class="mb-1 fst-italic">
+                "Superkompetent und freundlich"
+              </h5>
+              <p class="mb-1 fst-italic">
+                "Alles gut organisiert, super erklärt. Abläufe funktionieren
+                Hand in Hand. Personal freundlich."
+              </p>
+              <small>Max berichtet als Patient</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+        
+      </div>
+  </section>
+
+
+<!-- Klinik Bewertungen Hospital Information -->
+<section id="all_info" class="bg-light py-3" style="display: {{display}};">
+  <div class="container-lg text-center">
+    <h3> Informationen über die Klinik</h3>
+    <div class="row py-2 g-5 justify-content-center align-items-center">
+      <div class="col-lg-4">
+
+        <!-- Klinik Bewertungen Card -->
+        <div class="card border-primary border-2">
+          <div class="card-header text-center text-primary">
+            <h4 class="card-title">{{kname}}</h4>
+          </div>
+          <div class="card-body text-center">
+            <div class="row g-0">
+              <img src="/static/images/klinik_bilder/{{kname}}.jpg" alt="">
+              <p class="">{{adresse}}</p>
+            </div>
+            <img src="/static/images/wcBilder/{{kname}}.png" class="img-fluid" alt="Word Cloud">
+            <p class="card-text mx-5 text-muted">So ist das Besucher-Feedback</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-lg-5">
+        <div class="container-lg">
+          <div class="row g-4 justify-content-center align-items-center">
+            <!-- Graph -->
+            <span class="tt" data-bs-placement="bottom" title="Sterne Verteilung der Klinik">
+              <canvas id="klinikDoughnut"></canvas>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- reviews list -->
+<section id="reviews" style="display: {{display}};">
+  <div class="container-lg">
+    <div class="text-center">
+      <h2><i class="bi bi-stars text-altdark"></i>Klinik Bewertungen</h2>
+      <p class="lead">Was Besucher über die Klinik gesagt haben...</p>
+    </div>
+    <div class="container-lg justify-content-center my-5">
+
+            <!-- KB Datatable Begin-->
+        <table id="table_id" class="display table">
+          <thead>
+            <tr>
+              <th>Bewertungen</th>
+              <th>Sterne</th>
+              <th>Sentiment</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              {% for i,j,k in kb %}
+              <td style="width: 80%;">{{i}}</td>
+              <td style="width: 12%;">
+                <div class="list-group-item py-3">
+                  <div class="pb-2">
+                    {% for k in range(j) %}
+                    <i class="bi bi-star-fill text-altdark"></i>
+                    {% endfor %}
+                  </div>
+              </td>
+              <td style="width: 8%;">{{k}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      <!-- KB Datatable End -->
+      
+    </div>
+  </div>
+</section>
+
+      </div>
+
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+          <!-- Google Maps Inhalt -->
+
+<!-- Google Maps Hospital Information -->
+<section id="all_info" class="bg-light py-3" style="display: {{display}};">
+  <div class="container-lg text-center">
+    <h3> Informationen über die Klinik</h3>
+    <div class="row py-2 g-5 justify-content-center align-items-center">
+      <div class="col-lg-4">
+
+        <!-- Google Maps Card -->
+        <div class="card border-primary border-2">
+          <div class="card-header text-center text-primary">
+            <h4 class="card-title">{{kname}}</h4>
+          </div>
+          <div class="card-body text-center">
+            <div class="row g-0">
+              <img src="/static/images/klinik_bilder/{{kname}}.jpg" alt="">
+              <p class="">{{adresse}}</p>
+            </div>
+            <img src="/static/images/wcBilder/{{kname}}.png" class="img-fluid" alt="Word Cloud">
+            <p class="card-text mx-5 text-muted">So ist das Besucher-Feedback</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="container-lg">
+          <div class="row g-4 justify-content-center align-items-center">
+            <!-- Graph -->
+            <span class="tt" data-bs-placement="bottom" title="Sterne Verteilung der Klinik">
+              <canvas id="gmDoughnut"></canvas>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+
+<!-- reviews list -->
+<section id="reviews" style="display: {{display}};">
+  <div class="container-lg">
+    <div class="text-center">
+      <h2><i class="bi bi-stars text-altdark"></i>Klinik Bewertungen</h2>
+      <p class="lead">Was Besucher über die Klinik gesagt haben...</p>
+    </div>
+
+    <div class="container-lg justify-content-center my-5">
+            <!-- GM Datatable Begin-->
+             
+        <table id="table_id2" class="display table">
+          <thead>
+            <tr>
+              <th>Bewertungen</th>
+              <th>Sterne</th>
+              <th>Sentiment</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              {% for i,j,k in gm %}
+              <td style="width: 80%;">{{i}}</td>
+              <td style="width: 12%;">
+                <div class="list-group-item py-3">
+                  <div class="pb-2">
+                    {% for k in range(j) %}
+                    <i class="bi bi-star-fill text-altdark"></i>
+                    {% endfor %}
+                  </div>
+              </td>
+              <td style="width: 8%;">{{k}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      <!-- GM Datatable End -->
+      
+    </div>
+  </div>
+</section>
+      </div>
+      
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+  <script>
+    const tooltips = document.querySelectorAll(".tt");
+    tooltips.forEach((t) => {
+      new bootstrap.Tooltip(t);
+    });
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0-rc.1/chartjs-plugin-datalabels.min.js" integrity="sha512-+UYTD5L/bU1sgAfWA0ELK5RlQ811q8wZIocqI7+K0Lhh8yVdIoAMEs96wJAIbgFvzynPm36ZCXtkydxu1cs27w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  // Dummy Doughnut
+  // var dDoughnut = document.getElementById("dummyDoughnut").getContext("2d");
+  // var myDoughnut = new Chart(dDoughnut, {
+  //   type: "doughnut",
+  //   data: {
+  //     labels: ["Unzufrieden", "Weniger Zufrieden",  "Zufrieden", "Sehr Zufrieden"],
+  //     datasets: [
+  //       {
+  //         data: [1,2,3,4],
+  //         backgroundColor: [
+  //           "#ffc107",
+  //           "#fd7e14",
+  //           "#dc3545",
+  //           "#198754",
+  //           "#4D5360"
+  //         ],
+  //         hoverBackgroundColor: [
+  //           "#FF5A5E",
+  //           "#5AD3D1",
+  //           "#FFC870",
+  //           "#A8B3C5",
+  //           "#616774",
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   options: {
+  //     responsive: true,
+  //     animation: {
+  //           duration: 2800,
+  //   },
+  // }
+  // });
+  //     <block:actions:2>
+       
+</script>
+<script>
+
+// Bewertungen Horizontal
+let ctx2 = document.getElementById('myChart').getContext('2d');
+        let myChart = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+              labels: 
+              [
+'Klinik am Zuckerberg',
+'Eilenriede Klinik Hannover',
+'Herzogin Elisabeth Hospital',
+'Klinik Fallingbostel',
+'Kreiskrankenhaus Osterholz',
+'St. Martini Krankenhaus',
+'AMEOS Klinikum Seepark Geestland',
+'Diana Kliniken',
+'Elbe Klinikum Buxtehude',
+'MediClin Klinikum Soltau',
+'Klinikum Peine',
+'Sophienklinik',
+'DIAKOVERE Henriettenstift',
+'Krankenhaus Winsen',
+'Klinikum Wolfsburg',
+'HELIOS Klinik Cuxhaven',
+'Agaplesion - Diakonieklinikum Rotenburg',
+'Helios Kliniken Mittelweser',
+'Krankenhaus Walsrode',
+'KRH Klinikum Agness Karll Laatzen',
+'Krankenhaus Buchholz',
+'Klinikum Wahrendorff',
+'AMEOS Klinikum Hildesheim',
+'Psychiatrische Klinik Lüneburg'
+],
+              datasets: [
+                {
+                  label: 'klinikbewertungen.de',
+                  data: [4.654545454545455,
+                        4.375510204081633,
+                        4.180769230769231,
+                        4.118536585365854,
+                        4.002272727272726,
+                        3.966666666666667,
+                        3.836111111111111,
+                        3.7371165644171804,
+                        3.717073170731706,
+                        3.526344086021506,
+                        3.4937931034482754,
+                        3.4578947368421056,
+                        3.4066390041493784,
+                        3.3860465116279075,
+                        3.323706896551724,
+                        3.2615999999999996,
+                        3.2222222222222228,
+                        3.183064516129032,
+                        2.974038461538461,
+                        2.945762711864406,
+                        2.8430894308943087,
+                        2.8295238095238093,
+                        2.3818713450292393,
+                        2.231372549019608
+                      ],
+                  backgroundColor: [
+
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 2,
+                  hoverBorderWidth: 3,
+                  hoverBorderColor: '#000',
+                  borderColor: '#777'
+              },
+            
+              {
+                  label: 'google maps',
+                  data: [3.918919,
+4.766667,
+4.766667,
+4.090909,
+3.925000,
+4.218750,
+3.212766,
+3.866667,
+3.337079,
+3.351852,
+3.500000,
+3.820000,
+2.969388,
+3.033113,
+2.750000,
+2.893443,
+2.975460,
+2.386667,
+2.981982,
+2.900000,
+2.762712,
+2.857143,
+2.523077,
+2.264706
+],
+                  backgroundColor: [
+                  'rgba(75, 192, 192, 0.2)',
+
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 2,
+                  hoverBorderWidth: 3,
+                  hoverBorderColor: '#000',
+                  borderColor: '#777'
+              }]
+          },
+          options: {
+            plugins: {
+              title: {
+                display: true,
+                text: 'Vergleich der Krankenhauszufriedenheit'
+            },
+            scales: {
+              y: [{
+                title: {
+                  display: true,
+                  text: 'Your Title'
+                }
+              }]
+            }
+          },
+            // title:{
+            //   display:true,
+            //   text:'Deneme'
+            // },
+            animation: {
+            duration: 2800,
+          },
+          legend:{
+            position:'right',
+           },
+           indexAxis:'y',
+              scales: {
+                y: {
+                  beginAtZero: true,
+                }
+              }
+          }
+      });
+</script>
+<script>
+  // Klinik Doughnut
+  var kbDoughnut = document.getElementById("klinikDoughnut").getContext("2d");
+  var myPieChart = new Chart(kbDoughnut, {
+    type: "doughnut",
+    data: {
+      labels: ["Unzufrieden", "Weniger Zufrieden",  "Zufrieden", "Sehr Zufrieden"],
+      datasets: [{
+        label: 'Klinik Sterne Verteilung',
+          data: {{data}},
+          backgroundColor: [
+            "#d10606",
+            "#fc6d14",
+            "#ffe100",
+            "#008710",
+            "#4D5360"
+          ],
+                
+
+          hoverBackgroundColor: [
+            "#8f0606",
+            "#bd3b04",
+            "#b0a700",
+            "#075e11",
+            "#616774",
+          ],
+        }]
+      },
+      plugins: [ChartDataLabels],
+      options: {
+        responsive: true,
+        animation: {
+          duration: 2800,
+        },
+        plugins: {
+          labels: {
+            render: 'label'
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          },
+          datalabels: {
+            color: 'white',
+            anchor: 'right'
+            // render: 'percentage'
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      }
+  
+  }
+  );
+  // GM Doughnut
+  var gmDoughnut = document.getElementById("gmDoughnut").getContext("2d");
+  var myPieChart2 = new Chart(gmDoughnut, {
+    type: "doughnut",
+    data: {
+      labels: ["Unzufrieden", "Weniger Zufrieden", "Neutral" , "Zufrieden", "Sehr Zufrieden"],
+      datasets: [
+        {
+          data: {{gmdata}},
+          backgroundColor: [
+            "#d10606",
+            "#fc6d14",
+            "#4D5360",
+            "#ffe100",
+            "#008710"
+          ],
+                
+
+          hoverBackgroundColor: [
+            "#8f0606",
+            "#bd3b04",
+            "#616774",
+            "#b0a700",
+            "#075e11",
+            
+          ],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      animation: {
+            duration: 2800,
+    },
+  }
+  });
+</script>
+</body>
+
+</html>
