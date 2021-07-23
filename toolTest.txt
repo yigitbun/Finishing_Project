@@ -1,3 +1,5 @@
+Beispiel Bewertungen
+
 Bei der Behandlung war zwar schon viel schönes dabei, aber gut gemeint ist nicht immer gut gemacht.
 Bei der Behandlung war zwar schon viel schönes dabei, aber gut gemeint ist nicht immer gut gemacht.	neg
 Das Krankenhaus war schon nicht schlecht.	neg (sic!)
